@@ -1,0 +1,44 @@
+services:
+  mariadb:
+    image: mariadb:10.8
+    restart: always
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+      - --skip-innodb-read-only-compressed # Temporary fix for MariaDB 10.6
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+    volumes:
+      - mariadb-data:/var/lib/mysql
+
+  redis:
+    image: redis:alpine
+    restart: always
+
+  frappe:
+    image: frappe/bench:latest
+    restart: always
+    command: bash /workspace/init.sh
+    depends_on:
+      - redis
+      - mariadb
+    environment:
+      - SHELL=/bin/bash
+      - REDIS_CACHE=redis://redis:6379
+      - REDIS_QUEUE=redis://redis:6379
+      - REDIS_SOCKETIO=redis://redis:6379
+    working_dir: /home/frappe
+    volumes:
+      - .:/workspace
+    ports:
+      - "8000:8000"
+      - "9000:9000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  mariadb-data:
