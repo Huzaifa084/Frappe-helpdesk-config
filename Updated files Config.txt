@@ -1,0 +1,72 @@
+Setting Up Your Frappe Helpdesk on Another PC
+To set up your Frappe Helpdesk project on another PC, you'll need to transfer the configuration files and follow these steps:
+
+Prerequisites for the New PC
+Install Docker Desktop
+Install Docker Compose
+Make sure ports 8000 and 9000 are available
+Step-by-Step Transfer Process
+1. Transfer the Project Files
+Transfer these essential files to the new PC:
+
+docker-compose.yml
+init.sh
+You can copy them using a USB drive, cloud storage, or by creating a Git repository.
+
+2. Create the Project Directory
+
+# Create a directory for the project on the new PC
+mkdir "c:\Users\path\to\HelpDesk"
+
+3. Place the Files
+Copy the transferred files into this directory:
+
+docker-compose.yml
+init.sh
+
+4. Start the Project
+Navigate to the project directory and start the containers:
+
+cd "c:\Users\path\to\HelpDesk"
+docker-compose up -d
+
+5. Monitor the Installation Process
+The first start will take time as it downloads Docker images and sets up the environment:
+
+docker-compose logs -f frappe
+
+6. Wait for Initialization to Complete
+This process will:
+
+Download the Frappe Docker image
+Initialize the Frappe bench
+Set up the database
+Install the Helpdesk application
+Build all required assets
+7. Access the Application
+Once initialization is complete (usually takes 10-20 minutes), access your application at:
+
+http://localhost:8000
+Log in with:
+
+Username: Administrator
+Password: admin
+Troubleshooting on the New PC
+If Assets Are Missing
+
+docker-compose exec frappe bash -c "cd /home/frappe/frappe-bench && bench build --app helpdesk"
+
+If You Get Redis Connection Errors
+Check if the Redis URLs in the docker-compose.yml file have the correct format:
+
+REDIS_CACHE=redis://redis:6379
+REDIS_QUEUE=redis://redis:6379
+REDIS_SOCKETIO=redis://redis:6379
+
+If the Application Is Not Starting
+Ensure there are no port conflicts:
+
+netstat -ano | findstr :8000
+netstat -ano | findstr :9000
+
+
