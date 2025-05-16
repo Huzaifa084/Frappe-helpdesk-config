@@ -1,0 +1,73 @@
+# Target PC Setup Instructions
+
+Follow these steps on the target PC to install and restore the Frappe Helpdesk application:
+
+## Prerequisites
+1. Make sure Docker Desktop is installed and running
+2. Make sure PowerShell is available (already included in Windows)
+
+## Step-by-step Migration Process
+
+1. Create a directory for the Helpdesk application:
+   ```
+   mkdir C:\HelpDesk
+   ```
+
+2. Copy the HelpDesk_complete.zip file to this directory
+
+3. Extract the ZIP file:
+   ```
+   Expand-Archive -Path "C:\HelpDesk\HelpDesk_complete.zip" -DestinationPath "C:\HelpDesk" -Force
+   ```
+
+4. Navigate to the HelpDesk directory:
+   ```
+   cd C:\HelpDesk
+   ```
+
+5. Start the Docker containers:
+   ```
+   docker-compose up -d
+   ```
+
+6. Wait for initialization (you can monitor progress):
+   ```
+   docker-compose logs -f frappe
+   ```
+   (Press Ctrl+C to exit the logs when you see the initialization is complete)
+
+7. Run the restoration script:
+   ```
+   .\transfer\restore-agent.ps1
+   ```
+
+8. After the restoration completes, verify the Helpdesk is working by accessing:
+   http://localhost:8000
+   
+   Login with:
+   - Username: Administrator
+   - Password: admin
+
+9. If the automated restoration fails, follow the manual steps in RESTORE_INSTRUCTIONS.txt
+
+## Verification Steps
+
+After migration, confirm that:
+- All your tickets, categories, and users are present
+- You can create new tickets
+- Attachments and history are available
+- Email notifications are working
+
+If you encounter any issues, check the Docker logs:
+```
+docker-compose logs frappe
+docker-compose logs mariadb
+```
+
+## Troubleshooting
+
+If the site doesn't come up:
+1. Ensure all containers are running: `docker-compose ps`
+2. Check for port conflicts (8000-8005)
+3. Verify Docker has enough resources allocated
+4. Try restarting the containers: `docker-compose restart`
