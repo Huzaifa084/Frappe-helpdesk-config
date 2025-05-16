@@ -116,7 +116,10 @@ $filesToCopy = @(
     "init.sh",
     "transfer\RESTORE_INSTRUCTIONS.txt",
     "transfer\restore-agent.ps1",
-    "transfer\TRANSFER_COMPLETE.txt"
+    "transfer\TRANSFER_COMPLETE.txt",
+    "transfer\fix-line-endings.sh",
+    "transfer\HOW_TO_START.md",
+    "transfer\TARGET_PC_INSTRUCTIONS.txt"
 )
 
 foreach ($file in $filesToCopy) {

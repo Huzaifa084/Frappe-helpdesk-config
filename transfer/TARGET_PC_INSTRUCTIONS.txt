@@ -20,6 +20,13 @@ Follow these steps on the target PC to install and restore the Frappe Helpdesk a
    Expand-Archive -Path "C:\HelpDesk\HelpDesk_complete.zip" -DestinationPath "C:\HelpDesk" -Force
    ```
 
+4. Fix shell script line endings (critical to prevent Docker errors):
+   ```
+   $content = Get-Content -Path ".\init.sh" -Raw
+   $content = $content -replace "`r`n", "`n"
+   [System.IO.File]::WriteAllText(".\init.sh", $content)
+   ```
+
 4. Navigate to the HelpDesk directory:
    ```
    cd C:\HelpDesk
