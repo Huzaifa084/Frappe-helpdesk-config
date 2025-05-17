@@ -65,6 +65,13 @@
    - Login with:
      - Username: Administrator
      - Password: admin
+   - If you see 404 errors for asset files, run these additional commands:
+     ```powershell
+     # Force rebuild all assets
+     docker-compose exec frappe bash -c "cd /home/frappe/frappe-bench && bench build --force"
+     # Clear cache
+     docker-compose exec frappe bash -c "cd /home/frappe/frappe-bench && bench --site localhost clear-cache"
+     ```
 
 ## Troubleshooting
 
